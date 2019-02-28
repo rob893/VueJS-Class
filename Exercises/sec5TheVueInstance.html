@@ -1,0 +1,147 @@
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.js"></script>
+
+<div id="app1">
+    <h1 ref="heading">{{ title }}</h1>
+    <button @click="show" ref="myButton">Show Paragraph</button>
+    <button @click="destroy">Destroy</button>
+    <p v-if="showParagraph">This is not always visible</p>
+</div>
+
+<div id="app2">
+    <h1>{{ title }}</h1>
+    <button @click="onChange">Change something in Vue 1</button>
+    <hello></hello>
+    <hello></hello>
+</div>
+
+<div id="app3">
+
+</div>
+
+<script>
+
+    Vue.component('hello', 
+    {
+        template: "<h1>Hello!</h1>"
+    });
+
+    var vm1 = new Vue
+    ({
+        el: "#app1",
+
+        data:
+        {
+            title: 'The VueJS Instance',
+            showParagraph: false
+        },
+
+        methods:
+        {
+            show()
+            {
+                this.showParagraph = true;
+                this.updateTitle('The VueJS Instance (Updated)');
+                this.$refs.myButton.innerText = "Test";
+            },
+
+            updateTitle(title)
+            {
+                this.title = title;
+            },
+
+            destroy()
+            {
+                this.$destroy();
+            }
+        },
+
+        computed:
+        {
+            lowercaseTitle()
+            {
+                return this.title.toLowerCase();
+            }
+        },
+
+        watch:
+        {
+            title(value)
+            {
+                alert('Title was changed, new value: ' + value);
+            }
+        },
+
+        //Lifecycle hooks 
+
+        beforeCreate()
+        {
+            console.log("beforeCreate()");
+        },
+
+        created()
+        {
+            console.log("created()");
+        },
+
+        beforeMount()
+        {
+            console.log("before mount");
+        },
+
+        mounted()
+        {
+            console.log("mounted");
+        },
+
+        beforeUpdate()
+        {
+            console.log("before update");
+        },
+
+        updated()
+        {
+            console.log("updated");
+        },
+
+        beforeDestroy()
+        {
+            console.log("before destroy");
+        },
+
+        destroyed()
+        {
+            console.log("destroyed");
+        }
+    });
+
+    vm1.$refs.heading.innerText = "Something else";
+
+    setTimeout(function(){
+        vm1.title = "Changed by timer";
+    }, 3000);
+
+    var vm2 = new Vue
+    ({
+        el: '#app2',
+
+        data:
+        {
+            title: 'The second Instance'
+        },
+
+        methods:
+        {
+            onChange()
+            {
+                vm1.title = 'Changed';
+            }
+        }
+    });
+
+    var vm3 = new Vue
+    ({
+        template: '<h1>Hello!</h1>'
+    });
+
+    vm3.$mount('#app3');
+</script>
