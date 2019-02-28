@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Vue</title>
+    </head>
+
+    <style>
+    
+    .demo
+    {
+        width: 100px;
+        height: 100px;
+        background-color: grey;
+        display: inline-block;
+        margin: 10px;
+    }
+
+    .red
+    {
+        background-color: red;
+    }
+
+    .green
+    {
+        background-color: green;
+    }
+
+    .blue
+    {
+        background-color: blue;
+    }
+
+    </style>
+
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.js"></script>
+
+        <div id="app">
+            <input type="text" v-on:input="changeTitle">
+            <h1 v-once>{{ title }}</h1>
+            <p>{{ sayHello() }} - <a v-bind:href="link">Google</a></p>
+            <p v-html="finishedLink"></p>
+            <button v-on:click="incrememnt(1, $event)">Increment</button>
+            <button v-on:click="decrememnt(1, $event)">Decrement</button>
+            <p>{{ counter }}</p>
+            <p>{{ resultOutput }}</p>
+            <p @mousemove="updateCoordinates">
+                Coordinates: {{ x }} / {{ y }}
+                <span v-on:mousemove.stop="">Dead Spot</span>
+            </p>
+
+            <input type="text" v-on:keyup.enter="alertMe">
+            <br>
+            <div class="demo" @click="attachRed = !attachRed" :class="divClasses"></div>
+            <div class="demo" :style="myStyle"></div>
+            <div class="demo" :style="[myStyle, {height: width + 'px'}]"></div>
+            <hr>
+            <input type="text" v-model="color">
+            <input type="text" v-model="width">
+            <hr>
+            <p v-if="show">You can see me!</p>
+            <p v-else>Now you see me!</p>
+            <template v-if="show">
+                <h1>Heading</h1>
+                <p>Inside template</p>
+            </template>
+            <p v-show="show">Do you see me also?</p>
+            <button @click="show = !show">Switch</button>
+            <hr>
+
+            <ul>
+                <li v-for="(ingredient, i) in ingredients" :key="ingredient">{{ ingredient }} ({{ i }})</li>
+            </ul>
+            <button @click="ingredients.push('spices')">Add New</button>
+            <hr>
+
+            <ul>
+                <li v-for="person in persons">
+                    <div v-for='(value, key, index) in person'>{{ key }}: {{ value }} {{ index }}</div>
+                </li> 
+            </ul>
+
+            <span v-for="n in 10">{{ n }}</span>
+
+            <hr>
+
+            <template v-for="(ingredient, i) in ingredients">
+                <h1>{{ ingredient }}</h1>
+                <p>{{ i }}</p>
+            </template>
+            
+        </div>
+
+        
+        <script>
+
+            var app = new Vue
+            ({
+                el: "#app",
+
+                data: 
+                {
+                    title: "Hello world!",
+                    link: 'http://google.com',
+                    finishedLink: '<a href="http://google.com">Google</a>',
+                    counter: 0,
+                    x: 0,
+                    y: 0,
+                    result: "",
+                    attachRed: false,
+                    color: "green",
+                    width: 100,
+                    show: true,
+                    ingredients: ['meat', 'fruit', 'cookies'],
+                    persons: 
+                    [
+                        {name: 'Max', age: 27, color: 'red'},
+                        {name: 'Anna', age: 'unknown', color: 'blue'}
+                    ]
+                },
+
+                computed:
+                {
+                    resultOutput()
+                    {
+                        return this.result = this.counter > 5 ? 'Greater than 5' : 'Less than 5';
+                    },
+
+                    divClasses()
+                    {
+                        return { 
+                            red: this.attachRed,
+                            blue: !this.attachRed
+                        };
+                    },
+
+                    myStyle()
+                    {
+                        return {
+                            backgroundColor: this.color,
+                            width: this.width + "px"
+                        };
+                    }
+                },
+
+                // watch:
+                // {
+                //     counter: function(value)
+                //     {
+                //         setTimeout(function()
+                //         {
+                //             app.counter = 0;
+                //         }, 2000);
+                //     }
+                // },
+
+                methods:
+                {
+                    changeTitle(event)
+                    {
+                        this.title = event.target.value;
+                    },
+
+                    sayHello()
+                    {
+                        this.title = "Hello";
+                        return this.title;
+                    },
+
+                    incrememnt(step, event)
+                    {
+                        this.counter += step;
+                        
+                    },
+
+                    decrememnt(step, event)
+                    {
+                        this.counter -= step;
+                    },
+
+                    updateCoordinates(event)
+                    {
+                        this.x = event.clientX;
+                        this.y = event.clientY;
+                    },
+
+                    alertMe()
+                    {
+                        alert('ASlert');
+                    }
+                }
+            });
+
+        </script>
+
+    </body>
+</html>

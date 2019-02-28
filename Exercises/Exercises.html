@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Vue</title>
+    </head>
+
+    <style>
+        #effect 
+        {
+            width: 100px;
+            height: 100px;
+            border: 1px solid black;
+        }
+
+        .highlight 
+        {
+            background-color: red;
+            width: 200px !important;
+        }
+
+        .shrink 
+        {
+            background-color: gray;
+            width: 50px !important;
+        }
+
+        .green
+        {
+            background-color: green;
+        }
+
+        .blue
+        {
+            background-color: blue;
+        }
+    </style>
+
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.js"></script>
+
+        <div id="exercise">
+        <!-- 1) Fill the <p> below with your Name and Age - using Interpolation -->
+            <p>VueJS is pretty cool - My name is {{ name }} and I am {{ age }} years old.</p>
+            <!-- 2) Output your age, multiplied by 3 -->
+            <p>My age times 3 is {{ age * 3 }}</p>
+            <!-- 3) Call a function to output a random float between 0 and 1 (Math.random()) -->
+            <p>Random number: {{ getRandom(true) }}</p>
+            <!-- 4) Search any image on Google and output it here by binding the "src" attribute -->
+            <div>
+                <img style="width:100px;height:100px" v-bind:src="imageLink">
+            </div>
+            <!-- 5) Pre-Populate this input with your name (set the "value" attribute) -->
+            <div>
+                <input type="text" v-bind:value="name">
+            </div>
+
+            <!-- 1) Show an alert when the Button gets clicked -->
+            <div>
+                <button v-on:click="alertMe">Show Alert</button>
+            </div>
+            <!-- 2) Listen to the "keydown" event and store the value in a data property (hint: event.target.value gives you the value) -->
+            <div>
+                <input type="text" v-on:keydown.enter="getKey($event)">
+                <p>{{ value }}</p>
+            </div>
+            <!-- 3) Adjust the example from 2) to only fire if the "key down" is the ENTER key -->
+            <div>
+                <input type="text">
+                <p>{{ value }}</p>
+            </div>
+
+            <p>Current number: {{ number }}</p>
+            <button @click="number += 5">Add 5</button>
+            <button @click="number++">Add 1</button>
+            <input type="number" v-model="timeout">
+            <p>{{ result }}</p>
+
+            <!-- 1) Start the Effect with the Button. The Effect should alternate the "highlight" or "shrink" 
+                class on each new setInterval tick (attach respective class to the div with id "effect" below) -->
+            <div>
+                <button @click="startEffect">Start Effect</button>
+                <div id="effect" :class="effectStatus"></div>
+              </div>
+              <!-- 2) Create a couple of CSS classes and attach them via the array syntax -->
+              <div :class="[className, {highlight: highlighted}]">I got no class :(</div>
+              <!-- 3) Let the user enter a class (create some example classes) and attach it -->
+              <div>
+                <input type="text" v-model="className">
+                <div :class="className">adsf</div>
+              </div>
+              <!-- 4) Let the user enter a class and enter true/ false for another class (create some example classes) and attach the classes -->
+              <div>
+                <input type="text" v-model="className">
+                <input type="text" v-model="boolThing">
+                <div :class="[className, {highlight: boolThing}]">derp</div>
+              </div>
+              <!-- 5) Repeat 3) but now with values for styles (instead of class names). Attach the respective styles.  -->
+              <div>
+                <input type="text" v-model="color">
+                <div :style="myStyle">asdfasdfasdf</div>
+              </div>
+              <!-- 6) Create a simple progress bar with setInterval and style bindings. Start it by hitting the below button. -->
+              <div>
+                <button v-on:click="startProgress">Start Progress</button>
+                <div :style="barStyle">nnnn</div>
+              </div>
+
+        </div>
+        
+        <script>
+            var exercise1 = new Vue
+            ({
+                el: "#exercise",
+
+                data:
+                {
+                    name: "Robert",
+                    age: 27,
+                    imageLink: "https://r.hswstatic.com/w_907/gif/tesla-cat.jpg",
+                    value: "",
+                    number: 0,
+                    timeout: 0,
+                    highlighted: false,
+                    className: "None",
+                    color: "grey",
+                    width: 0,
+                    boolThing: false,
+                    barColor: "red"
+                },
+
+                computed:
+                {
+                    result()
+                    {
+                        return this.number == 37 ? 'Done' : 'Not there yet!';
+                    },
+
+                    effectStatus()
+                    {
+                        return {
+                            highlight: this.highlighted,
+                            shrink: !this.highlighted
+                        };
+                    },
+
+                    myStyle()
+                    {
+                        return {
+                            backgroundColor: this.color,
+                        };
+                    },
+
+                    barStyle()
+                    {
+                        return {
+                            backgroundColor: this.barColor,
+                            width: this.width + "px"
+                        };
+                    }
+                },
+
+                watch:
+                {
+                    number: function()
+                    {
+                        setTimeout(function()
+                        {
+                            exercise1.number = 0;
+                        }, this.timeout);
+                    }
+                },
+
+                methods:
+                {
+                    getRandom(isWhole = false)
+                    {
+                        if(isWhole)
+                        {
+                            return Math.random() * 100;
+                        }
+                        else
+                        {
+                            return Math.random();
+                        }
+                    },
+
+                    alertMe()
+                    {
+                        alert('ASlert');
+                    },
+
+                    getKey(event)
+                    {
+                        this.value = event.target.value;
+                    },
+
+                    startEffect()
+                    {
+                        setInterval(function()
+                        {
+                            exercise1.highlighted = !exercise1.highlighted;
+                        }, 1000);
+                    },
+
+                    startProgress()
+                    {
+                        this.width = 0;
+
+                        setInterval(function()
+                        {
+                            exercise1.width += 10;
+
+                            if(exercise1.width >= 50)
+                            {
+                                exercise1.barColor = "green";
+                            }
+                        }, 1000);
+                    }
+                }
+            });
+        </script>
+
+    </body>
+</html>

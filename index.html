@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Vue</title>
+
+        <style>
+            .color-red { color: red; }
+            .color-green { color: green; }
+            .is-loading { background: red; }
+        </style>
+    </head>
+
+    <body>
+        <div id="root">
+            <h2>All Tasks</h2>
+            <ul>
+                <li v-for="task in tasks">{{ task.description }} <button @click="toggleTask(task)">Toggle Task</button></li>
+            </ul>
+
+            <h2>Incomplete Tasks</h2>
+            <ul>
+                <li v-for="task in incompleteTasks">{{ task.description }}</li>
+            </ul>
+
+            <h2>Complete Tasks</h2>
+            <ul>
+                <li v-for="task in completeTasks">{{ task.description }}</li>
+            </ul>
+
+            <h2>Names</h2>
+            <ul>
+                <li v-for="name in names">{{ name }}</li>
+            </ul>
+            <input type="text" id="input" v-model="newName">
+            <button @click="addName" v-bind:title="title">Add Name</button>
+            <button v-bind:class="{ 'is-loading': isLoading }" @click="toggle">Click Me</button>
+        </div>
+        
+
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.js"></script>
+
+        <script>
+            var app = new Vue
+            ({
+                el: "#root",
+                data: 
+                {
+                    names: ['Joe', 'Mary', 'John', 'Jack'],
+                    newName: "",
+                    title: "penis",
+                    className: "color-red",
+                    isLoading: false,
+                    message: "Hello world!",
+                    tasks: [
+                        { description: 'Go to the store', completed: true},
+                        { description: 'Eat', completed: true},
+                        { description: 'Sleep', completed: false},
+                        { description: 'Go to the store again', completed: true},
+                        { description: 'Pet the cat', completed: false}
+                    ]
+                },
+
+                computed: 
+                {
+                    incompleteTasks()
+                    {
+                        return this.tasks.filter(task => !task.completed);
+                    },
+
+                    completeTasks()
+                    {
+                        return this.tasks.filter(task => task.completed);
+                    }
+                },
+
+                methods: 
+                {
+                    addName() 
+                    {
+                        this.names.push(this.newName);
+                        this.newName = "";
+                    },
+
+                    toggle()
+                    {
+                        this.isLoading = !this.isLoading;
+                    },
+                    
+                    toggleTask(task)
+                    {
+                        task.completed = !task.completed;
+                    }
+                }
+            });
+
+            
+        </script>
+
+    </body>
+</html>
