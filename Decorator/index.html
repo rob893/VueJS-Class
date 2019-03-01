@@ -1,12 +1,30 @@
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.js"></script>
 
 <div id="app">
-    <h1>Product: {{ productDescription }}</h1>
-    <h1>Cost: {{ totalCost }}</h1>
-    <button @click="addMilk">Add Milk</button>
-    <button @click="addMocha">Add Mocha</button>
-    <button @click="addWhippedCream">Add Whipped Cream</button>
-    <button @click="clearAdditions">Clear Additions</button>
+    <h1>Product: {{ beverage.type }}</h1>
+    <p>Size: {{ beverage.size }}</p>
+    <div v-if="beverage.decorators.length > 0">
+        <ul>
+            <li v-for="(decorator, index) in beverage.decorators">
+                Add {{ decorator.description }} for {{ decorator.cost }}
+                <button @click="removeDecorator(index)">Remove</button>
+            </li>
+        </ul>
+    </div>
+    <p>Cost: {{ totalCost }}</p>
+    <button @click="selectProduct('black')">Black Coffee</button>
+    <button @click="selectProduct('iced')">Iced Coffee</button>
+    <button @click="selectProduct('blonde')">Blonde Coffe</button>
+    <br><br>
+    <button @click="setSize('small')">Small</button>
+    <button @click="setSize('med')">Medium</button>
+    <button @click="setSize('large')">Large</button>
+    <br><br>
+    <button @click="addMilk()">Add Milk</button>
+    <button @click="addMocha()">Add Mocha</button>
+    <button @click="addWhippedCream()">Add Whipped Cream</button>
+    <br><br>
+    <button @click="clearAdditions()">Clear Additions</button>
 </div>
 
 <script>
@@ -17,19 +35,45 @@
 
         data:
         {
-            decorators: [],
-            baseCost: 1.00,
-            description: "Black coffee"
+            beverage: 
+            {
+                type: "Black Coffee",
+                baseCost: 1.00,
+                size: "small",
+                decorators: []
+            }
         },
 
         methods:
         {
+            selectProduct(name)
+            {
+                switch(name)
+                {
+                    case "black":
+                        this.beverage.type = "Black Coffee";
+                        this.beverage.baseCost = 1.00;
+                        break;
+                    case "iced":
+                        this.beverage.type = "Iced Coffee";
+                        this.beverage.baseCost = 1.25;
+                        break;
+                    case "blonde":
+                        this.beverage.type = "Blonde Coffee";
+                        this.beverage.baseCost = 1.50;
+                        break;
+                    default:
+                        this.beverage.type = "Black Coffee";
+                        this.beverage.baseCost = 1.00;
+                }
+            },
+
             addMilk()
             {
-                this.decorators.push
+                this.beverage.decorators.push
                 (
                     {
-                        description: " add milk",
+                        description: "milk",
                         cost: 0.50
                     }
                 );
@@ -37,10 +81,10 @@
 
             addMocha()
             {
-                this.decorators.push
+                this.beverage.decorators.push
                 (
                     {
-                        description: " add mocha",
+                        description: "mocha",
                         cost: 1.00
                     }
                 );
@@ -48,10 +92,10 @@
 
             addWhippedCream()
             {
-                this.decorators.push
+                this.beverage.decorators.push
                 (
                     {
-                        description: " add whipped cream",
+                        description: "whipped cream",
                         cost: 0.50
                     }
                 );
@@ -59,7 +103,17 @@
 
             clearAdditions()
             {
-                this.decorators = [];
+                this.beverage.decorators = [];
+            },
+
+            setSize(size)
+            {
+                this.beverage.size = size;
+            },
+
+            removeDecorator(index)
+            {
+                this.beverage.decorators.splice(index, 1);
             }
         },
 
@@ -67,11 +121,20 @@
         {
             totalCost()
             {
-                var total = this.baseCost;
+                var total = this.beverage.baseCost;
 
-                for(var i = 0; i < this.decorators.length; i++)
+                if(this.beverage.size == "med")
                 {
-                    total += this.decorators[i].cost;
+                    total += (total * 0.25);
+                }
+                else if(this.beverage.size == "large")
+                {
+                    total += (total * 0.5);
+                }
+
+                for(var i = 0; i < this.beverage.decorators.length; i++)
+                {
+                    total += this.beverage.decorators[i].cost;
                 }
 
                 return total;
@@ -79,18 +142,16 @@
 
             productDescription()
             {
-                var fullDescription = this.description;
+                var fullDescription = this.beverage.type;
 
-                for(var i = 0; i < this.decorators.length; i++)
+                for(var i = 0; i < this.beverage.decorators.length; i++)
                 {
-                    fullDescription += this.decorators[i].description;
+                    fullDescription += this.beverage.decorators[i].description;
                 }
 
                 return fullDescription;
             }
-        },
-
-       
+        }
     });
 
 </script>
