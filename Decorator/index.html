@@ -1,0 +1,96 @@
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.js"></script>
+
+<div id="app">
+    <h1>Product: {{ productDescription }}</h1>
+    <h1>Cost: {{ totalCost }}</h1>
+    <button @click="addMilk">Add Milk</button>
+    <button @click="addMocha">Add Mocha</button>
+    <button @click="addWhippedCream">Add Whipped Cream</button>
+    <button @click="clearAdditions">Clear Additions</button>
+</div>
+
+<script>
+
+    var vm1 = new Vue
+    ({
+        el: "#app",
+
+        data:
+        {
+            decorators: [],
+            baseCost: 1.00,
+            description: "Black coffee"
+        },
+
+        methods:
+        {
+            addMilk()
+            {
+                this.decorators.push
+                (
+                    {
+                        description: " add milk",
+                        cost: 0.50
+                    }
+                );
+            },
+
+            addMocha()
+            {
+                this.decorators.push
+                (
+                    {
+                        description: " add mocha",
+                        cost: 1.00
+                    }
+                );
+            },
+
+            addWhippedCream()
+            {
+                this.decorators.push
+                (
+                    {
+                        description: " add whipped cream",
+                        cost: 0.50
+                    }
+                );
+            },
+
+            clearAdditions()
+            {
+                this.decorators = [];
+            }
+        },
+
+        computed:
+        {
+            totalCost()
+            {
+                var total = this.baseCost;
+
+                for(var i = 0; i < this.decorators.length; i++)
+                {
+                    total += this.decorators[i].cost;
+                }
+
+                return total;
+            },
+
+            productDescription()
+            {
+                var fullDescription = this.description;
+
+                for(var i = 0; i < this.decorators.length; i++)
+                {
+                    fullDescription += this.decorators[i].description;
+                }
+
+                return fullDescription;
+            }
+        },
+
+       
+    });
+
+</script>
