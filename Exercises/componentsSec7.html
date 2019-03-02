@@ -1,0 +1,72 @@
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.js"></script>
+
+<div id="app">
+    <my-cmp-global></my-cmp-global>
+    <my-cmp-global></my-cmp-global>
+</div>
+
+<div id="app2">
+        <my-cmp-local></my-cmp-local>
+        <my-cmp-local></my-cmp-local>
+</div>
+
+<script>
+
+//Globally accessable
+Vue.component('my-cmp-global', 
+{
+    data() 
+    {
+        return {
+            status: 'Critical'
+        }
+    },
+
+    template: '<p>Server Status: {{ status }} (<button @click="changeStatus">Change</button>)</p>',
+
+    methods:
+    {
+        changeStatus()
+        {
+            this.status = "OK";
+        }
+    }
+});
+
+//local component
+var cmp = 
+{
+    data() 
+    {
+        return {
+            status: 'Critical'
+        }
+    },
+
+    template: '<p>Server Status: {{ status }} (<button @click="changeStatus">Change</button>)</p>',
+
+    methods:
+    {
+        changeStatus()
+        {
+            this.status = "OK";
+        }
+    }
+};
+
+new Vue({
+    el: "#app",
+
+    
+})
+
+new Vue({
+    el: "#app2",
+
+    components: 
+    {
+        'my-cmp-local': cmp
+    }
+})
+
+</script>
