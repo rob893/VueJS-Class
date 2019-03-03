@@ -24,7 +24,7 @@ export default
         'my-header': Header,
         'my-footer': Footer,
         'servers': Servers,
-        'server-details': ServerDetails
+        'server-details': ServerDetails,
     }
 }
 </script>
